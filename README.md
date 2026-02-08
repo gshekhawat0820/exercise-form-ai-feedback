@@ -160,6 +160,14 @@ curl -X POST http://localhost:8000/api/v1/analyze \
   | jq
 ```
 
+## Example Output
+
+Here is example output after running the program on extracted frames from a video:
+
+![Example Output](tests/fixtures/example_output.png)
+
+The script analyzes 5 frames and returns personalized feedback about the exercise form, including specific tips for improvement.
+
 ## Testing
 
 Run the test suite:
@@ -256,7 +264,10 @@ exercise-form-ai-feedback/
 │   ├── __init__.py
 │   ├── conftest.py             # Pytest configuration and fixtures
 │   ├── test_api.py             # API endpoint tests
-│   └── test_validators.py      # Input validation tests
+│   ├── test_validators.py      # Input validation tests
+│   └── fixtures/
+│       ├── example_output.png  # Example CLI output screenshot
+│       └── *.mp4, *.MOV        # Test video files (gitignored)
 └── scripts/
     ├── test_request.py         # CLI tool to test API with videos or frames
     └── extract_frames.py       # Extract frames from videos for testing
