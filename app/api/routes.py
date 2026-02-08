@@ -150,7 +150,6 @@ async def analyze_exercise(
         # Return response
         return AnalyzeResponse(
             feedback=feedback,
-            exercise_detected="detected",  # Placeholder - will be extracted from feedback
             frames_analyzed=frames_analyzed,
             timestamp=datetime.utcnow()
         )

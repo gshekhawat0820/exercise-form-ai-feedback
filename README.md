@@ -137,7 +137,6 @@ curl -X POST http://localhost:8000/api/v1/analyze \
 ```json
 {
   "feedback": "I can see you're performing a squat. You're doing a good job keeping your chest up and maintaining balance throughout the movement. One thing to focus on is your knee alignment...",
-  "exercise_detected": "squat",
   "frames_analyzed": 5,
   "timestamp": "2026-02-07T15:30:00Z"
 }
@@ -167,7 +166,6 @@ def analyze_video(video_path: str):
 
     if response.status_code == 200:
         result = response.json()
-        print(f"Exercise detected: {result['exercise_detected']}")
         print(f"Feedback: {result['feedback']}")
         print(f"Frames analyzed: {result['frames_analyzed']}")
     else:

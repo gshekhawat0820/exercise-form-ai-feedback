@@ -35,7 +35,6 @@ def analyze_frames_from_images(image_paths, api_url="http://localhost:8000/api/v
         print("\n" + "="*50)
         print("✓ Analysis Successful!")
         print("="*50)
-        print(f"\nExercise detected: {result['exercise_detected']}")
         print(f"\nFeedback:\n{result['feedback']}\n")
         print(f"Frames analyzed: {result['frames_analyzed']}")
         print(f"Timestamp: {result['timestamp']}")
