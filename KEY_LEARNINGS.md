@@ -188,11 +188,10 @@ Status codes aren't just conventions - they communicate intent.
 
 ### What I Added
 
-Created a few helper scripts beyond the core requirements:
+Created helper scripts beyond the core requirements:
 
-1. `scripts/extract_frames.py` - Extract frames from a video for testing images
-2. `scripts/test_request.py` - CLI tool to test the API
-3. `test_with_frames.py` - Quick test with extracted frames
+1. `scripts/extract_frames.py` - Extract frames from a video for inspection
+2. `scripts/test_request.py` - CLI tool to test the API with videos or frames
 
 Also wrote a comprehensive README and added `.env.example`.
 
@@ -200,10 +199,13 @@ Also wrote a comprehensive README and added `.env.example`.
 
 Makes it much easier to test and demo the API. Also shows I'm thinking about the next person who uses this code.
 
+Kept the scripts simple and focused - each script has one clear purpose:
+- `test_request.py`: Test the API (video or frames)
+- `extract_frames.py`: Extract frames for inspection
+
 ### Takeaway
 
-Documentation and tooling are part of code quality. They don't take that long and make
-everyone's lives easier in the long term.
+Documentation and tooling are part of code quality. But it's equally important to keep things minimal - every extra file is cognitive overhead. When in doubt, delete the redundant tools.
 
 ---
 
@@ -281,9 +283,10 @@ Given time constraints, prioritized:
 ### What I Deprioritized
 
 Didn't implement:
-- Full test coverage (got to ~40-50%, not 80%)
+- Full test coverage (focused on critical paths over 100% coverage)
 - Observability/metrics (added logging but not full observability)
 - Rate limiting on the API (would add in production)
+- Complex configuration options (hardcoded localhost for simplicity)
 
 ### Reasoning
 
@@ -303,6 +306,7 @@ Things that worked well:
 4. **Adding production patterns upfront** - Retry logic, proper logging, resource cleanup
 5. **Documenting decisions** - Comments explaining the 98% cap, why delete=False, etc.
 6. **Utility scripts** - Made testing much easier
+7. **Ruthless simplification** - Removed redundant scripts and unnecessary configuration options to keep the project focused
 
 Things I'd do differently:
 

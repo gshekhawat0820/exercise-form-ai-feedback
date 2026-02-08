@@ -20,7 +20,7 @@ An LLM-based exercise form feedback system that analyzes exercise videos using c
 
 ## Prerequisites
 
-- **Python 3.10 or higher**
+- **Python 3.9 or higher**
 - **OpenAI API key** (with GPT-4o access)
 
 ## Installation
@@ -28,7 +28,8 @@ An LLM-based exercise form feedback system that analyzes exercise videos using c
 ### 1. Clone the repository
 
 ```bash
-cd future-applied-ai
+git clone <repository-url>
+cd exercise-form-ai-feedback
 ```
 
 ### 2. Create a virtual environment
@@ -116,23 +117,6 @@ GET /health
 POST /api/v1/analyze
 ```
 
-**Option 1: Video File Upload (multipart/form-data)**
-
-```bash
-curl -X POST http://localhost:8000/api/v1/analyze \
-  -F "video=@path/to/squat_video.mp4"
-```
-
-**Option 2: Pre-extracted Frames (JSON)**
-
-```bash
-curl -X POST http://localhost:8000/api/v1/analyze \
-  -H "Content-Type: application/json" \
-  -d '{
-    "frames": ["base64_encoded_frame_1", "base64_encoded_frame_2", ...]
-  }'
-```
-
 **Success Response (200 OK):**
 ```json
 {
@@ -151,29 +135,20 @@ curl -X POST http://localhost:8000/api/v1/analyze \
 
 ## Usage Examples
 
-### Python Script
+### Using the test_request Script (Recommended)
 
-```python
-import requests
+The easiest way to test the API is using the included `test_request.py` script:
 
-def analyze_video(video_path: str):
-    """Send video to API for analysis."""
-    url = "http://localhost:8000/api/v1/analyze"
+```bash
+# Analyze a video file
+python3 scripts/test_request.py --video path/to/your_video.mp4
 
-    with open(video_path, "rb") as f:
-        files = {"video": f}
-        response = requests.post(url, files=files)
+# Analyze pre-extracted frames
+python3 scripts/test_request.py --frames frame1.jpg frame2.jpg frame3.jpg frame4.jpg frame5.jpg
 
-    if response.status_code == 200:
-        result = response.json()
-        print(f"Feedback: {result['feedback']}")
-        print(f"Frames analyzed: {result['frames_analyzed']}")
-    else:
-        print(f"Error: {response.status_code}")
-        print(response.json())
-
-if __name__ == "__main__":
-    analyze_video("my_squat_video.mp4")
+# Extract frames first, then analyze
+python3 scripts/extract_frames.py my_video.mp4
+python3 scripts/test_request.py --frames extracted_frames/*.jpg
 ```
 
 ### cURL
@@ -200,59 +175,91 @@ pytest tests/ -v --cov=app --cov-report=html
 open htmlcov/index.html
 ```
 
+## Utility Scripts
+
+The project includes helper scripts in the `scripts/` directory:
+
+### test_request.py
+CLI tool for testing the API with videos or frames. The server must be running at `http://localhost:8000`.
+
+```bash
+# Test with a video file
+python3 scripts/test_request.py --video my_squat.mp4
+
+# Test with pre-extracted frames
+python3 scripts/test_request.py --frames frame1.jpg frame2.jpg frame3.jpg
+```
+
+### extract_frames.py
+Extract frames from a video file for testing or inspection.
+
+```bash
+python3 scripts/extract_frames.py path/to/video.mp4
+```
+
+This creates an `extracted_frames/` directory with 5 frames from the video at key positions (0%, 25%, 50%, 75%, ~98%).
+
 ## Performance & Cost
 
 ### Expected Performance
-- **Frame extraction time**: 1-3 seconds
-- **LLM API call time**: 2-5 seconds
+- **Frame extraction time**: 1-3 seconds (depends on video length and format)
+- **LLM API call time**: 2-5 seconds (includes retry logic with exponential backoff)
 - **Total request time**: 3-8 seconds
 
 ### Estimated Costs (OpenAI GPT-4o)
-- **Input tokens per request**: ~2000-3000 tokens (5 images + text prompt)
-- **Output tokens per request**: ~100-300 tokens (feedback text)
-- **Approximate cost per request**: $0.01-0.03 USD
+**Pricing:**
+- Input: $2.50 per 1M tokens
+- Output: $10.00 per 1M tokens
+
+**Per Request Estimate:**
+- **Input tokens**: ~2,700-4,200 tokens (5 images @ ~500-800 tokens each + ~200 token prompt)
+- **Output tokens**: ~100-300 tokens (feedback text)
+- **Approximate cost**: $0.008-0.015 USD per request (~$0.01 average)
+
+**Cost Breakdown Example:**
+- 100 requests/day × $0.01 = $1.00/day
+- 1,000 requests/month × $0.01 = $10.00/month
+
+*Note: Costs may vary based on image complexity and response length. Images are resized to max 1024px to optimize costs.*
 
 ## Project Structure
 
 ```
-future-applied-ai/
-├── .env.example              # Environment variable template
-├── .gitignore               # Git ignore rules
-├── README.md                # This file
-├── requirements.txt         # Python dependencies
+exercise-form-ai-feedback/
+├── .env.example                  # Environment variable template
+├── .gitignore                   # Git ignore rules
+├── README.md                    # This file
+├── KEY_LEARNINGS.md             # Implementation insights and learnings
+├── requirements.txt             # Python dependencies
 ├── app/
 │   ├── __init__.py
-│   ├── main.py             # FastAPI application entry point
+│   ├── main.py                 # FastAPI application entry point
 │   ├── api/
 │   │   ├── __init__.py
-│   │   └── routes.py       # API endpoint definitions
+│   │   └── routes.py           # API endpoint definitions
 │   ├── services/
 │   │   ├── __init__.py
-│   │   ├── video_processor.py    # Video decoding and frame extraction
-│   │   ├── frame_sampler.py      # Frame sampling logic
-│   │   └── llm_analyzer.py       # OpenAI LLM integration
+│   │   ├── video_processor.py  # Video decoding and frame extraction
+│   │   ├── frame_sampler.py    # Frame sampling logic (handles codec edge cases)
+│   │   └── llm_analyzer.py     # OpenAI LLM integration with retry logic
 │   ├── models/
 │   │   ├── __init__.py
-│   │   └── schemas.py      # Pydantic request/response models
+│   │   └── schemas.py          # Pydantic request/response models
 │   ├── core/
 │   │   ├── __init__.py
-│   │   ├── config.py       # Application settings and configuration
-│   │   └── prompts.py      # LLM prompt templates
+│   │   ├── config.py           # Application settings and configuration
+│   │   └── prompts.py          # LLM prompt templates
 │   └── utils/
 │       ├── __init__.py
-│       └── validators.py   # Input validation utilities
+│       └── validators.py       # Input validation utilities
 ├── tests/
 │   ├── __init__.py
-│   ├── test_api.py
-│   ├── test_validators.py
-│   ├── test_frame_sampler.py
-│   ├── test_video_processor.py
-│   ├── test_llm_analyzer.py
-│   ├── conftest.py         # Pytest configuration
-│   └── fixtures/
-│       └── sample_squat.mp4    # Sample test video
+│   ├── conftest.py             # Pytest configuration and fixtures
+│   ├── test_api.py             # API endpoint tests
+│   └── test_validators.py      # Input validation tests
 └── scripts/
-    └── test_request.py     # Example usage script
+    ├── test_request.py         # CLI tool to test API with videos or frames
+    └── extract_frames.py       # Extract frames from videos for testing
 ```
 
 ## Troubleshooting
@@ -261,23 +268,34 @@ future-applied-ai/
 - Ensure video is in MP4, MOV, or AVI format
 - Try converting to MP4 H.264 codec (most compatible)
 
-### OpenCV Cannot Decode Video
-- Install codec support: `brew install ffmpeg` (macOS) or `apt-get install ffmpeg` (Linux)
-- Check video file is not corrupted
-
 ### OpenAI API Rate Limit
-- Wait and retry after a few seconds
-- Consider implementing request queuing for high-load scenarios
-- Check your OpenAI API tier limits
+- The API includes automatic retry logic with exponential backoff (3 attempts)
+- If you still hit rate limits, wait a few minutes before retrying
+- Check your OpenAI API tier limits at https://platform.openai.com/account/limits
+
+### NumPy/OpenCV Compatibility Issues
+If you see `ImportError: cannot import name 'NDArray' from 'numpy.typing'`:
+- Ensure NumPy version is between 1.21.0 and 2.0: `pip install "numpy>=1.21.0,<2.0"`
+- This is already specified in `requirements.txt`
 
 ### Dependencies Installation Fails
-- Ensure Python 3.10+ is installed: `python --version`
+- Ensure Python 3.9+ is installed: `python --version`
 - Try upgrading pip: `pip install --upgrade pip`
-- On macOS with M1/M2, you may need to install Rosetta for some packages
 
-## License
+### Server Won't Start / Import Errors
+- Make sure you've activated the virtual environment: `source venv/bin/activate`
+- Verify all dependencies are installed: `pip install -r requirements.txt`
+- Check that `.env` file exists and contains `OPENAI_API_KEY`
 
-This project is for educational and demonstration purposes.
+## Development Notes
+
+For detailed implementation insights, edge cases discovered, and lessons learned during development, see [KEY_LEARNINGS.md](KEY_LEARNINGS.md). This document covers:
+
+- Frame extraction edge cases (the 98% cap solution for codec limitations)
+- Retry logic implementation for external APIs
+- Resource cleanup with finally blocks
+- Error message design principles
+- AI-assisted development approach and transparency
 
 ## Acknowledgments
 

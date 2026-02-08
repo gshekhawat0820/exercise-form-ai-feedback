@@ -1,3 +1,6 @@
+# MacOS
+.DS_Store
+
 # Python
 venv/
 __pycache__/
@@ -41,6 +44,5 @@ htmlcov/
 *.mp4
 *.mov
 *.avi
-
 extracted_frames/
 .llm/
