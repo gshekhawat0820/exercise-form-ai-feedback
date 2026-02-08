@@ -28,7 +28,7 @@ An LLM-based exercise form feedback system that analyzes exercise videos using c
 ### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:gshekhawat0820/exercise-form-ai-feedback.git
 cd exercise-form-ai-feedback
 ```
 
