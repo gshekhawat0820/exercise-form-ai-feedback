@@ -41,3 +41,6 @@ htmlcov/
 *.mp4
 *.mov
 *.avi
+
+extracted_frames/
+.llm/
