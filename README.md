@@ -87,7 +87,7 @@ Environment variables in `.env`:
 Start the development server:
 
 ```bash
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --port 8000
 ```
 
 The API will be available at `http://localhost:8000`
