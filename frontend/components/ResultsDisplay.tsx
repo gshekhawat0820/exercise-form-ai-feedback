@@ -1,23 +1,26 @@
-'use client';
+"use client";
 
-import { CheckCircle, RotateCcw, Calendar, Layers } from 'lucide-react';
-import { formatTimestamp } from '@/lib/utils';
-import { AnalyzeResponse } from '@/lib/api';
+import { CheckCircle, RotateCcw, Calendar, Layers } from "lucide-react";
+import { formatTimestamp } from "@/lib/utils";
+import { AnalyzeResponse } from "@/lib/api";
 
 interface ResultsDisplayProps {
   result: AnalyzeResponse;
   onReset: () => void;
 }
 
-export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
+export default function ResultsDisplay({
+  result,
+  onReset,
+}: ResultsDisplayProps) {
   // Parse feedback sections
   const parseFeedback = (feedback: string) => {
     const sections: { title: string; content: string }[] = [];
-    
+
     // Try to split by common patterns (numbered lists, bullet points, etc.)
-    const lines = feedback.split('\n');
-    let currentSection = { title: 'Feedback', content: '' };
-    
+    const lines = feedback.split("\n");
+    let currentSection = { title: "Feedback", content: "" };
+
     lines.forEach((line) => {
       const trimmed = line.trim();
       if (trimmed) {
@@ -26,18 +29,21 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
           if (currentSection.content) {
             sections.push({ ...currentSection });
           }
-          currentSection = { title: trimmed.replace(':', ''), content: '' };
+          currentSection = { title: trimmed.replace(":", ""), content: "" };
         } else {
-          currentSection.content += (currentSection.content ? '\n' : '') + trimmed;
+          currentSection.content +=
+            (currentSection.content ? "\n" : "") + trimmed;
         }
       }
     });
-    
+
     if (currentSection.content) {
       sections.push(currentSection);
     }
-    
-    return sections.length > 0 ? sections : [{ title: 'Feedback', content: feedback }];
+
+    return sections.length > 0
+      ? sections
+      : [{ title: "Feedback", content: feedback }];
   };
 
   const feedbackSections = parseFeedback(result.feedback);
@@ -54,7 +60,8 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
             Analysis Complete!
           </h3>
           <p className="text-sm text-green-700">
-            Your exercise form has been analyzed. Review the feedback below to improve your technique.
+            Your exercise form has been analyzed. Review the feedback below to
+            improve your technique.
           </p>
         </div>
         <button
@@ -73,7 +80,9 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
             <Layers className="w-5 h-5" />
             <span className="text-sm font-medium">Frames Analyzed</span>
           </div>
-          <p className="text-2xl font-bold text-slate-900">{result.frames_analyzed}</p>
+          <p className="text-2xl font-bold text-slate-900">
+            {result.frames_analyzed}
+          </p>
         </div>
         <div className="bg-white border border-slate-200 rounded-lg p-4">
           <div className="flex items-center gap-2 text-slate-600 mb-2">
@@ -91,7 +100,7 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
         <div className="bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-4">
           <h2 className="text-xl font-bold text-white">AI Form Feedback</h2>
         </div>
-        
+
         <div className="p-6 space-y-6">
           {feedbackSections.map((section, index) => (
             <div key={index} className="space-y-3">
@@ -104,10 +113,10 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
                 </h3>
               )}
               <div className="prose prose-slate max-w-none">
-                {section.content.split('\n').map((paragraph, pIndex) => {
+                {section.content.split("\n").map((paragraph, pIndex) => {
                   const trimmed = paragraph.trim();
                   if (!trimmed) return null;
-                  
+
                   // Check if it's a numbered list item
                   const numberedMatch = trimmed.match(/^(\d+[\.)]\s*)(.*)/);
                   if (numberedMatch) {
@@ -116,26 +125,37 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
                         <span className="font-semibold text-primary-600 flex-shrink-0">
                           {numberedMatch[1]}
                         </span>
-                        <p className="text-slate-700 leading-relaxed">{numberedMatch[2]}</p>
+                        <p className="text-slate-700 leading-relaxed">
+                          {numberedMatch[2]}
+                        </p>
                       </div>
                     );
                   }
-                  
+
                   // Check if it's a bullet point
-                  if (trimmed.startsWith('•') || trimmed.startsWith('-') || trimmed.startsWith('*')) {
+                  if (
+                    trimmed.startsWith("•") ||
+                    trimmed.startsWith("-") ||
+                    trimmed.startsWith("*")
+                  ) {
                     return (
                       <div key={pIndex} className="flex gap-3 mb-3">
-                        <span className="text-primary-600 flex-shrink-0">•</span>
+                        <span className="text-primary-600 flex-shrink-0">
+                          •
+                        </span>
                         <p className="text-slate-700 leading-relaxed">
                           {trimmed.substring(1).trim()}
                         </p>
                       </div>
                     );
                   }
-                  
+
                   // Regular paragraph
                   return (
-                    <p key={pIndex} className="text-slate-700 leading-relaxed mb-3">
+                    <p
+                      key={pIndex}
+                      className="text-slate-700 leading-relaxed mb-3"
+                    >
                       {trimmed}
                     </p>
                   );
@@ -158,7 +178,7 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
           onClick={() => {
             const text = `Exercise Form Feedback\n\nAnalysis Date: ${formatTimestamp(result.timestamp)}\nFrames Analyzed: ${result.frames_analyzed}\n\n${result.feedback}`;
             navigator.clipboard.writeText(text);
-            alert('Feedback copied to clipboard!');
+            alert("Feedback copied to clipboard!");
           }}
           className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 px-6 rounded-lg transition-colors"
         >

@@ -42,11 +42,13 @@ python3 -m venv venv
 ### 3. Activate virtual environment
 
 **On macOS/Linux:**
+
 ```bash
 source venv/bin/activate
 ```
 
 **On Windows:**
+
 ```bash
 venv\Scripts\activate
 ```
@@ -73,15 +75,15 @@ OPENAI_API_KEY=sk-your-actual-api-key-here
 
 Environment variables in `.env`:
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `OPENAI_API_KEY` | OpenAI API key | Required |
-| `MODEL_NAME` | OpenAI model to use | `gpt-4o` |
-| `MAX_VIDEO_SIZE_MB` | Maximum video file size | `50` |
-| `MAX_VIDEO_DURATION_SEC` | Maximum video duration | `30` |
-| `MIN_VIDEO_DURATION_SEC` | Minimum video duration | `5` |
-| `FRAME_COUNT` | Number of frames to extract | `5` |
-| `LOG_LEVEL` | Logging level | `INFO` |
+| Variable                 | Description                 | Default  |
+| ------------------------ | --------------------------- | -------- |
+| `OPENAI_API_KEY`         | OpenAI API key              | Required |
+| `MODEL_NAME`             | OpenAI model to use         | `gpt-4o` |
+| `MAX_VIDEO_SIZE_MB`      | Maximum video file size     | `50`     |
+| `MAX_VIDEO_DURATION_SEC` | Maximum video duration      | `30`     |
+| `MIN_VIDEO_DURATION_SEC` | Minimum video duration      | `5`      |
+| `FRAME_COUNT`            | Number of frames to extract | `5`      |
+| `LOG_LEVEL`              | Logging level               | `INFO`   |
 
 ## Running the Application
 
@@ -94,6 +96,7 @@ Use the convenient start script to run both servers:
 ```
 
 This will start:
+
 - Backend API on `http://localhost:8000`
 - Frontend UI on `http://localhost:3000`
 
@@ -126,17 +129,20 @@ The web interface will be available at `http://localhost:3000`
 ## API Documentation
 
 Once the backend server is running, visit:
+
 - **Swagger UI**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
 
 ### Endpoints
 
 #### Health Check
+
 ```http
 GET /health
 ```
 
 **Response:**
+
 ```json
 {
   "status": "healthy"
@@ -144,11 +150,13 @@ GET /health
 ```
 
 #### Analyze Exercise Video
+
 ```http
 POST /api/v1/analyze
 ```
 
 **Success Response (200 OK):**
+
 ```json
 {
   "feedback": "I can see you're performing a squat. You're doing a good job keeping your chest up and maintaining balance throughout the movement. One thing to focus on is your knee alignment...",
@@ -158,6 +166,7 @@ POST /api/v1/analyze
 ```
 
 **Error Responses:**
+
 - `413 Payload Too Large` - File exceeds size/duration limits
 - `422 Unprocessable Entity` - Invalid file format or processing failure
 - `429 Too Many Requests` - API rate limit exceeded
@@ -219,6 +228,7 @@ open htmlcov/index.html
 The project includes helper scripts in the `scripts/` directory:
 
 ### test_request.py
+
 CLI tool for testing the API with videos or frames. The server must be running at `http://localhost:8000`.
 
 ```bash
@@ -230,6 +240,7 @@ python3 scripts/test_request.py --frames frame1.jpg frame2.jpg frame3.jpg
 ```
 
 ### extract_frames.py
+
 Extract frames from a video file for testing or inspection.
 
 ```bash
@@ -241,25 +252,30 @@ This creates an `extracted_frames/` directory with 5 frames from the video at ke
 ## Performance & Cost
 
 ### Expected Performance
+
 - **Frame extraction time**: 1-3 seconds (depends on video length and format)
 - **LLM API call time**: 2-5 seconds (includes retry logic with exponential backoff)
 - **Total request time**: 3-8 seconds
 
 ### Estimated Costs (OpenAI GPT-4o)
+
 **Pricing:**
+
 - Input: $2.50 per 1M tokens
 - Output: $10.00 per 1M tokens
 
 **Per Request Estimate:**
+
 - **Input tokens**: ~2,700-4,200 tokens (5 images @ ~500-800 tokens each + ~200 token prompt)
 - **Output tokens**: ~100-300 tokens (feedback text)
 - **Approximate cost**: $0.008-0.015 USD per request (~$0.01 average)
 
 **Cost Breakdown Example:**
+
 - 100 requests/day × $0.01 = $1.00/day
 - 1,000 requests/month × $0.01 = $10.00/month
 
-*Note: Costs may vary based on image complexity and response length. Images are resized to max 1024px to optimize costs.*
+_Note: Costs may vary based on image complexity and response length. Images are resized to max 1024px to optimize costs._
 
 ## Project Structure
 
@@ -307,31 +323,37 @@ exercise-form-ai-feedback/
 ## Troubleshooting
 
 ### Video Format Not Supported
+
 - Ensure video is in MP4, MOV, or AVI format
 - Try converting to MP4 H.264 codec (most compatible)
 
 ### OpenAI API Rate Limit
+
 - The API includes automatic retry logic with exponential backoff (3 attempts)
 - If you still hit rate limits, wait a few minutes before retrying
 - Check your OpenAI API tier limits at https://platform.openai.com/account/limits
 
 ### NumPy/OpenCV Compatibility Issues
+
 If you see `ImportError: cannot import name 'NDArray' from 'numpy.typing'`:
+
 - Ensure NumPy version is between 1.21.0 and 2.0: `pip install "numpy>=1.21.0,<2.0"`
 - This is already specified in `requirements.txt`
 
 ### Dependencies Installation Fails
+
 - Ensure Python 3.9+ is installed: `python --version`
 - Try upgrading pip: `pip install --upgrade pip`
 
 ### Server Won't Start / Import Errors
+
 - Make sure you've activated the virtual environment: `source venv/bin/activate`
 - Verify all dependencies are installed: `pip install -r requirements.txt`
 - Check that `.env` file exists and contains `OPENAI_API_KEY`
 
 ## Frontend Application
 
-A modern Next.js frontend is available in the `frontend/` directory! 
+A modern Next.js frontend is available in the `frontend/` directory!
 
 ### Features
 
@@ -366,6 +388,7 @@ For detailed implementation insights, edge cases discovered, and lessons learned
 ## Acknowledgments
 
 Built with:
+
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [OpenAI GPT-4o](https://openai.com/)
 - [OpenCV](https://opencv.org/)

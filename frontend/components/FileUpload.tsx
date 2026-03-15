@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState, useCallback, DragEvent } from 'react';
-import { Upload, FileVideo, AlertCircle, Loader2 } from 'lucide-react';
-import { apiClient } from '@/lib/api';
-import { isValidVideoType, isValidFileSize, formatFileSize } from '@/lib/utils';
+import { useState, useCallback, DragEvent } from "react";
+import { Upload, FileVideo, AlertCircle, Loader2 } from "lucide-react";
+import { apiClient } from "@/lib/api";
+import { isValidVideoType, isValidFileSize, formatFileSize } from "@/lib/utils";
 
 interface FileUploadProps {
   onAnalysisComplete: (result: any) => void;
@@ -11,7 +11,11 @@ interface FileUploadProps {
   setIsAnalyzing: (value: boolean) => void;
 }
 
-export default function FileUpload({ onAnalysisComplete, isAnalyzing, setIsAnalyzing }: FileUploadProps) {
+export default function FileUpload({
+  onAnalysisComplete,
+  isAnalyzing,
+  setIsAnalyzing,
+}: FileUploadProps) {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -43,14 +47,16 @@ export default function FileUpload({ onAnalysisComplete, isAnalyzing, setIsAnaly
   const handleFileSelect = (file: File) => {
     // Validate file type
     if (!isValidVideoType(file)) {
-      setError('Invalid file type. Please upload MP4, MOV, or AVI video files.');
+      setError(
+        "Invalid file type. Please upload MP4, MOV, or AVI video files.",
+      );
       setSelectedFile(null);
       return;
     }
 
     // Validate file size (50MB max)
     if (!isValidFileSize(file, 50)) {
-      setError('File too large. Maximum size is 50MB.');
+      setError("File too large. Maximum size is 50MB.");
       setSelectedFile(null);
       return;
     }
@@ -77,7 +83,11 @@ export default function FileUpload({ onAnalysisComplete, isAnalyzing, setIsAnaly
       const result = await apiClient.analyzeVideo(selectedFile);
       onAnalysisComplete(result);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred during analysis');
+      setError(
+        err instanceof Error
+          ? err.message
+          : "An error occurred during analysis",
+      );
       setIsAnalyzing(false);
     }
   };
@@ -88,9 +98,9 @@ export default function FileUpload({ onAnalysisComplete, isAnalyzing, setIsAnaly
       <div
         className={`relative border-2 border-dashed rounded-xl transition-all ${
           dragActive
-            ? 'border-primary-500 bg-primary-50'
-            : 'border-slate-300 bg-white hover:border-primary-400'
-        } ${isAnalyzing ? 'opacity-50 pointer-events-none' : ''}`}
+            ? "border-primary-500 bg-primary-50"
+            : "border-slate-300 bg-white hover:border-primary-400"
+        } ${isAnalyzing ? "opacity-50 pointer-events-none" : ""}`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
@@ -130,8 +140,12 @@ export default function FileUpload({ onAnalysisComplete, isAnalyzing, setIsAnaly
                 <FileVideo className="w-6 h-6 text-green-600" />
               </div>
               <div className="text-left">
-                <p className="font-medium text-slate-900">{selectedFile.name}</p>
-                <p className="text-sm text-slate-600">{formatFileSize(selectedFile.size)}</p>
+                <p className="font-medium text-slate-900">
+                  {selectedFile.name}
+                </p>
+                <p className="text-sm text-slate-600">
+                  {formatFileSize(selectedFile.size)}
+                </p>
               </div>
               {!isAnalyzing && (
                 <button
@@ -143,8 +157,18 @@ export default function FileUpload({ onAnalysisComplete, isAnalyzing, setIsAnaly
                   }}
                   className="ml-auto text-slate-400 hover:text-slate-600"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               )}
@@ -180,7 +204,9 @@ export default function FileUpload({ onAnalysisComplete, isAnalyzing, setIsAnaly
           <div className="flex items-center gap-4">
             <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
             <div>
-              <h4 className="font-medium text-blue-900 mb-1">Analyzing Your Form...</h4>
+              <h4 className="font-medium text-blue-900 mb-1">
+                Analyzing Your Form...
+              </h4>
               <p className="text-sm text-blue-700">
                 Our AI is examining your video. This may take up to 30 seconds.
               </p>
@@ -192,25 +218,61 @@ export default function FileUpload({ onAnalysisComplete, isAnalyzing, setIsAnaly
       {/* Tips */}
       {!selectedFile && !isAnalyzing && (
         <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-          <h4 className="font-medium text-slate-900 mb-3">Tips for best results:</h4>
+          <h4 className="font-medium text-slate-900 mb-3">
+            Tips for best results:
+          </h4>
           <ul className="space-y-2 text-sm text-slate-700">
             <li className="flex items-start gap-2">
-              <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="w-5 h-5 text-green-600 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
-              <span>Position camera to show your full body during the exercise</span>
+              <span>
+                Position camera to show your full body during the exercise
+              </span>
             </li>
             <li className="flex items-start gap-2">
-              <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="w-5 h-5 text-green-600 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
               <span>Ensure good lighting so your form is clearly visible</span>
             </li>
             <li className="flex items-start gap-2">
-              <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="w-5 h-5 text-green-600 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
-              <span>Capture at least 2-3 full repetitions of your exercise</span>
+              <span>
+                Capture at least 2-3 full repetitions of your exercise
+              </span>
             </li>
           </ul>
         </div>

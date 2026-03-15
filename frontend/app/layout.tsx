@@ -6,7 +6,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Exercise Form Feedback AI",
-  description: "Get AI-powered feedback on your exercise form from video analysis",
+  description:
+    "Get AI-powered feedback on your exercise form from video analysis",
 };
 
 export default function RootLayout({
