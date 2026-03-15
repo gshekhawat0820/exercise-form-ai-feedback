@@ -132,3 +132,33 @@ exercise-form-ai-feedback/
 ## Development Notes
 
 See [KEY_LEARNINGS.md](KEY_LEARNINGS.md) for implementation insights and edge cases discovered during development.
+
+## Production Considerations
+
+This project demonstrates core AI engineering capabilities with a working MVP. For production deployment, the following enhancements would be implemented:
+
+**Security & Authentication**
+- API key authentication for backend endpoints
+- Rate limiting (e.g., 10 requests/min per IP) to prevent abuse
+- CORS origins configured via `FRONTEND_URL` environment variable
+- Input sanitization for malicious file uploads
+
+**Scalability & Performance**
+- Async job queue (Celery + Redis) for video processing to handle concurrent uploads
+- Result caching (hash-based) to reduce redundant API calls and costs
+- CDN integration for static assets
+- Horizontal scaling with load balancing
+
+**Observability & Monitoring**
+- Structured logging with correlation IDs for request tracking
+- Metrics collection (Prometheus) for latency, error rates, and API costs
+- Alerting for service degradation or rate limit issues
+- Distributed tracing for debugging
+
+**Cost Optimization**
+- Video deduplication via content hashing
+- Frame compression before sending to OpenAI
+- Configurable quality settings based on use case
+- Usage analytics and per-user cost tracking
+
+Current focus is on demonstrating full-stack AI integration, proper error handling, and deployment automation.
