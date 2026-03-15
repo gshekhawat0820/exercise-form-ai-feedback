@@ -46,3 +46,15 @@ htmlcov/
 *.avi
 extracted_frames/
 .llm/
+
+# Server management
+.pids
+backend.log
+frontend.log
+
+# Frontend (Next.js)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env*.local
+frontend/*.log

@@ -9,6 +9,7 @@ An LLM-based exercise form feedback system that analyzes exercise videos using c
 - **AI-Powered Feedback**: Uses OpenAI GPT-4o Vision API to detect exercises and provide form feedback
 - **Dual Input Methods**: Supports both video file upload and pre-extracted base64-encoded frames
 - **RESTful API**: Built with FastAPI for high performance and automatic documentation
+- **Modern Frontend**: Next.js web interface with drag-and-drop upload
 
 ## What This System Does
 
@@ -82,19 +83,49 @@ Environment variables in `.env`:
 | `FRAME_COUNT` | Number of frames to extract | `5` |
 | `LOG_LEVEL` | Logging level | `INFO` |
 
-## Running the Server
+## Running the Application
 
-Start the development server:
+### Quick Start (Both Frontend & Backend)
+
+Use the convenient start script to run both servers:
 
 ```bash
+./start-servers.sh
+```
+
+This will start:
+- Backend API on `http://localhost:8000`
+- Frontend UI on `http://localhost:3000`
+
+To stop both servers:
+
+```bash
+./stop-servers.sh
+```
+
+### Run Backend Only
+
+Start the FastAPI development server:
+
+```bash
+source venv/bin/activate
 uvicorn app.main:app --port 8000
 ```
 
 The API will be available at `http://localhost:8000`
 
+### Run Frontend Only
+
+```bash
+cd frontend
+npm run dev
+```
+
+The web interface will be available at `http://localhost:3000`
+
 ## API Documentation
 
-Once the server is running, visit:
+Once the backend server is running, visit:
 - **Swagger UI**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
 
@@ -298,6 +329,30 @@ If you see `ImportError: cannot import name 'NDArray' from 'numpy.typing'`:
 - Verify all dependencies are installed: `pip install -r requirements.txt`
 - Check that `.env` file exists and contains `OPENAI_API_KEY`
 
+## Frontend Application
+
+A modern Next.js frontend is available in the `frontend/` directory! 
+
+### Features
+
+- 🎥 **Drag & Drop Upload** - Intuitive video upload interface
+- 🤖 **Real-time Analysis** - Instant AI feedback display
+- 🎨 **Modern UI** - Beautiful, responsive design with Tailwind CSS
+- 📱 **Mobile Friendly** - Works seamlessly on all devices
+
+### Quick Start
+
+```bash
+cd frontend
+npm install
+cp .env.local.example .env.local
+npm run dev
+```
+
+Visit **http://localhost:3000** to use the web interface!
+
+For detailed frontend documentation, see [frontend/README.md](frontend/README.md).
+
 ## Development Notes
 
 For detailed implementation insights, edge cases discovered, and lessons learned during development, see [KEY_LEARNINGS.md](KEY_LEARNINGS.md). This document covers:
@@ -314,3 +369,6 @@ Built with:
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [OpenAI GPT-4o](https://openai.com/)
 - [OpenCV](https://opencv.org/)
+- [Next.js](https://nextjs.org/)
+- [React](https://react.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
