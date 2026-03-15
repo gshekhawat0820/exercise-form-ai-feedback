@@ -9,58 +9,61 @@ An LLM-based exercise form feedback system that analyzes exercise videos using c
 - **AI-Powered Feedback**: Uses OpenAI GPT-4o Vision API for form analysis
 - **Modern Web Interface**: Next.js frontend with drag-and-drop upload
 - **RESTful API**: FastAPI backend with automatic documentation
+- **Docker Deployment**: Fully containerized with docker-compose
 
 ## Tech Stack
 
 **Backend:** FastAPI, OpenAI GPT-4o, OpenCV, Python 3.9+  
-**Frontend:** Next.js 15, React 18, TypeScript, Tailwind CSS
+**Frontend:** Next.js 15, React 18, TypeScript, Tailwind CSS  
+**Deployment:** Docker, Docker Compose
 
 ## Quick Start
 
-### 1. Clone and setup backend
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) and Docker Compose installed
+- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+
+### Setup and Run
+
+1. **Clone the repository:**
 
 ```bash
 git clone git@github.com:gshekhawat0820/exercise-form-ai-feedback.git
-cd exercise-form-ai-feedback/backend
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-cp .env.example .env
-# Edit .env and add your OPENAI_API_KEY
+cd exercise-form-ai-feedback
 ```
 
-### 2. Setup frontend
+2. **Add your OpenAI API key:**
 
 ```bash
-cd ../frontend
-npm install
-cp .env.local.example .env.local
+cp .env.docker.example .env.docker
+# Edit .env.docker and replace 'your-key-here' with your actual OpenAI API key
 ```
 
-### 3. Run both servers
+3. **Start the application:**
 
-From project root:
 ```bash
 ./start-servers.sh
 ```
 
-Or manually:
+That's it! The application will build and start automatically.
+
+### Access the Application
+
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8000
+- **API Docs**: http://localhost:8000/docs
+
+### Stop the Application
+
 ```bash
-# Terminal 1 - Backend
-cd backend
-source venv/bin/activate
-uvicorn app.main:app --port 8000
-
-# Terminal 2 - Frontend
-cd frontend
-npm run dev
+./stop-servers.sh
 ```
-
-Then visit **http://localhost:3000**
 
 ## Configuration
 
-**Backend** (`backend/.env`):
+All configuration is handled through `.env.docker`:
+
 ```bash
 OPENAI_API_KEY=sk-your-key-here
 MODEL_NAME=gpt-4o
@@ -70,33 +73,6 @@ MIN_VIDEO_DURATION_SEC=5
 FRAME_COUNT=5
 ```
 
-**Frontend** (`frontend/.env.local`):
-```bash
-NEXT_PUBLIC_API_URL=http://localhost:8000
-```
-- Frontend UI on `http://localhost:3000`
-
-To stop both servers:
-
-```bash
-./stop-servers.sh
-```
-
-### Run Backend Only
-
-Start the FastAPI development server:
-
-```bash
-source venv/bin/activate
-uvicorn app.main:app --port 8000
-```
-
-The API will be available at `http://localhost:8000`
-
-### Run Frontend Only
-
-```bash
-cd frontend
 ## API Endpoints
 
 - **Swagger UI**: http://localhost:8000/docs
@@ -123,9 +99,10 @@ curl -X POST http://localhost:8000/api/v1/analyze \
 
 ## Testing
 
+Run backend tests:
+
 ```bash
 cd backend
-source venv/bin/activate
 pytest tests/ -v --cov
 ```
 
@@ -136,18 +113,20 @@ exercise-form-ai-feedback/
 ├── backend/                 # Python FastAPI backend
 │   ├── app/                # Application code
 │   ├── tests/              # Backend tests
-│   ├── scripts/            # Utility scripts
-│   ├── requirements.txt    # Python dependencies
-│   ├── .env               # Environment config
-│   └── venv/              # Virtual environment
+│   ├── Dockerfile          # Backend Docker image
+│   └── requirements.txt    # Python dependencies
 ├── frontend/               # Next.js frontend
 │   ├── app/               # Pages and layouts
 │   ├── components/        # React components
 │   ├── lib/               # Utilities and API client
+│   ├── Dockerfile         # Frontend Docker image
 │   └── package.json       # Node dependencies
+├── docker-compose.yml      # Docker orchestration
+├── .env.docker            # Environment variables
+├── start-servers.sh       # Start script
+├── stop-servers.sh        # Stop script
 ├── README.md
-├── KEY_LEARNINGS.md
-└── start-servers.sh       # Quick start script
+└── KEY_LEARNINGS.md
 ```
 
 ## Development Notes

@@ -15,8 +15,8 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+backend/lib/
+backend/lib64/
 parts/
 sdist/
 var/
@@ -27,6 +27,7 @@ wheels/
 
 # Environment
 backend/.env
+.env.docker
 
 # Testing
 .pytest_cache/
@@ -58,3 +59,5 @@ frontend/.next/
 frontend/out/
 frontend/.env*.local
 frontend/*.log
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts
