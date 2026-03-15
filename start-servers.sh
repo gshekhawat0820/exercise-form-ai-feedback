@@ -10,23 +10,24 @@ echo "=========================================="
 echo ""
 
 # Check if we're in the project root
-if [ ! -f "requirements.txt" ] || [ ! -d "frontend" ]; then
+if [ ! -d "backend" ] || [ ! -d "frontend" ]; then
     echo "❌ Error: Please run this script from the project root directory"
     exit 1
 fi
 
 # Check Python backend
 echo "📋 Checking Python backend..."
-if [ ! -d "venv" ]; then
+if [ ! -d "backend/venv" ]; then
     echo "⚠️  Virtual environment not found. Please run:"
+    echo "   cd backend"
     echo "   python3 -m venv venv"
     echo "   source venv/bin/activate"
     echo "   pip install -r requirements.txt"
     exit 1
 fi
 
-if [ ! -f ".env" ]; then
-    echo "⚠️  .env file not found. Please create one with your OPENAI_API_KEY"
+if [ ! -f "backend/.env" ]; then
+    echo "⚠️  backend/.env file not found. Please create one with your OPENAI_API_KEY"
     exit 1
 fi
 
@@ -47,9 +48,11 @@ fi
 # Start backend in background
 echo ""
 echo "🔧 Starting FastAPI backend on http://localhost:8000..."
+cd backend
 source venv/bin/activate
-uvicorn app.main:app --port 8000 > backend.log 2>&1 &
+uvicorn app.main:app --port 8000 > ../backend.log 2>&1 &
 BACKEND_PID=$!
+cd ..
 echo "   Backend PID: $BACKEND_PID"
 
 # Wait for backend to start

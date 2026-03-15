@@ -2,7 +2,7 @@
 .DS_Store
 
 # Python
-venv/
+backend/venv/
 __pycache__/
 *.py[cod]
 *$py.class
@@ -26,7 +26,7 @@ wheels/
 *.egg
 
 # Environment
-.env
+backend/.env
 
 # Testing
 .pytest_cache/
@@ -44,7 +44,7 @@ htmlcov/
 *.mp4
 *.mov
 *.avi
-extracted_frames/
+backend/extracted_frames/
 .llm/
 
 # Server management
