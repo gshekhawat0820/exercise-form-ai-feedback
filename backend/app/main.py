@@ -32,10 +32,18 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# Configure CORS (adjust origins as needed for production)
+# Configure CORS with environment-specific origins
+allowed_origins = [
+    "http://localhost:3000",  # Local development
+]
+
+# Add production frontend URL if provided
+if settings.frontend_url:
+    allowed_origins.append(settings.frontend_url)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     min_video_duration_sec: int = 5
     frame_count: int = 5
     log_level: str = "INFO"
+    frontend_url: str | None = None  # Optional production frontend URL
 
     class Config:
         env_file = ".env"
