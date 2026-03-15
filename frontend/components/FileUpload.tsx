@@ -2,8 +2,8 @@
 
 import { useState, useCallback, DragEvent } from "react";
 import { Upload, FileVideo, AlertCircle, Loader2 } from "lucide-react";
-import { apiClient } from "@/lib/api";
-import { isValidVideoType, isValidFileSize, formatFileSize } from "@/lib/utils";
+import { apiClient } from "@/api/api";
+import { isValidVideoType, isValidFileSize, formatFileSize } from "@/api/utils";
 
 interface FileUploadProps {
   onAnalysisComplete: (result: any) => void;

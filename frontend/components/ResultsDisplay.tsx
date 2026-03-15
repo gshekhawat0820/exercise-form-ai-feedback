@@ -1,8 +1,8 @@
 "use client";
 
 import { CheckCircle, RotateCcw, Calendar, Layers } from "lucide-react";
-import { formatTimestamp } from "@/lib/utils";
-import { AnalyzeResponse } from "@/lib/api";
+import { formatTimestamp } from "@/api/utils";
+import { AnalyzeResponse } from "@/api/api";
 
 interface ResultsDisplayProps {
   result: AnalyzeResponse;
